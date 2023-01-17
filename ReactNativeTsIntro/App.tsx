@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import { Formik, Form, FormikProps } from 'formik';
+
 
 const App = () => {
   // interface Product {
@@ -77,32 +79,18 @@ const App = () => {
     companyName: string;
     contactName: string;
     contactTitle: string,
-    address: {
-      street: string,
-      city?: string,
-      region?: string,
-      postalCode?: number,
-      country?: string,
-      phone?: number
-    }
+    address: string,
   }
-
-  const Add = () => {
-    let new_supplier: Supplier = {
-      companyName: companyName,
-      contactName: contactName,
-      contactTitle: contactTitle,
-      address: {
-        street: street
-      }
-    };
-
-    axios.post('https://northwind.vercel.app/api/suppliers', new_supplier)
-  }
+  const values = {
+    companyName: '',
+    contactName: '',
+    contactTitle: '',
+    address: '',
+  };
 
   return (
     <>
-      <View>
+      {/* <View>
         <View>
           <Text>CompanyName:</Text>
           <TextInput style={styles.input} onChangeText={setcompanyName} />
@@ -124,7 +112,34 @@ const App = () => {
         <View>
           <Button title="Add" onPress={() => Add()} ></Button>
         </View>
-      </View>
+      </View> */}
+      <Formik initialValues={values} onSubmit={() => console.log('submitted')}>
+        {(props: FormikProps<Supplier>) => (
+          <Form>
+            <TextInput
+              style={styles.input}
+              placeholder="Your email..."
+              onChangeText={props.handleChange('companyName')}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Your name..."
+              onChangeText={props.handleChange('contactName')}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Your surname..."
+              onChangeText={props.handleChange('contactTitle')}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Your surname..."
+              onChangeText={props.handleChange('address')}
+            />
+            <Button onPress={() => props.handleSubmit()} title="Submit" />
+          </Form>
+        )}
+      </Formik>
     </>
   );
  
